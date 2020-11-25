@@ -67,8 +67,7 @@ module.exports = (env) => {
         port: 8888,
         proxy: {
           '/graphql': {
-            target: 'http://localhost:3000/',
-            secure: false,
+            target: 'http://localhost:4000/',
           },
         },
       },
