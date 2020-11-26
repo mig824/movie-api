@@ -11,17 +11,30 @@ const typeDefs = gql`
     runtime: String
   }
 
-  type LikeMovieResponse {
-    success: Boolean!
+  type MovieThumbs {
+    imdb_id: String
+    title: String
+    thumbs_up: Int
+    thumbs_down: Int
+  }
+
+  type UpdateThumbsResponse {
+    status: String!
     message: String
+    updated_doc: MovieThumbs
   }
 
   type Query {
     movie(title: String!): Movie
+    thumbs(imdb_id: ID!): MovieThumbs
   }
 
   type Mutation {
-    like_movie(id: ID!): LikeMovieResponse
+    update_thumbs(
+      is_liked: Boolean!
+      imdb_id: ID!
+      title: String!
+    ): UpdateThumbsResponse
   }
 `;
 
