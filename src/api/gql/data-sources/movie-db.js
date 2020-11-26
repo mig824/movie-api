@@ -1,30 +1,40 @@
 const { MongoDataSource } = require('apollo-datasource-mongodb');
 
 class MovieDB extends MongoDataSource {
-  async getMovie(imdbID) {
+  async getThumbs(imdbID) {
     try {
       const movie = await this.model.find({ imdb_id: imdbID });
-      console.log(movie);
+      const { imdb_id, title, thumbs_down, thumbs_up } = movie[0];
+      return {
+        imdb_id,
+        title,
+        thumbs_up,
+        thumbs_down,
+      };
     } catch (err) {
       console.log(err);
       throw new Error(err);
     }
   }
 
-  async updateThumbs(liked, imdbID) {
+  async updateThumbs(isLiked, imdb_id, title) {
     try {
-      if (liked) {
-        const dbRes = await this.model.updateOne(
-          { imdb_id: imdbID },
-          { $inc: { thumbs_up: 1 } }
+      if (isLiked) {
+        const dbRes = await this.model.findOneAndUpdate(
+          { imdb_id, title },
+          { $inc: { thumbs_up: 1 } },
+          { new: true, upsert: true, useFindAndModify: false }
         );
-        console.log('%s docs modified', dbRes.nModified);
+        console.log(dbRes.thumbs_up, 'thumbs up!');
+        return dbRes;
       } else {
-        const dbRes = await this.model.updateOne(
-          { imdb_id: imdbID },
-          { $inc: { thumbs_down: 1 } }
+        const dbRes = await this.model.findOneAndUpdate(
+          { imdb_id, title },
+          { $inc: { thumbs_down: 1 } },
+          { new: true, upsert: true, useFindAndModify: false }
         );
-        console.log('%s docs modified', dbRes.nModified);
+        console.log(dbRes.thumbs_down, 'thumbs down!');
+        return dbRes;
       }
     } catch (err) {
       console.log(err);
