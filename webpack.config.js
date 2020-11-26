@@ -3,11 +3,9 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const path = require('path');
 
 module.exports = (env) => {
-  const devEnv = env.development;
-  const prodEnv = env.production;
-  const apiEnv = env.api;
+  const { development, production, api } = env;
 
-  console.log('\nWEBPACK ENV: ', { devEnv, prodEnv, apiEnv }, '\n');
+  console.log('\nWEBPACK ENV: ', { development, production, api }, '\n');
 
   let config = {};
   const commonConfig = {
@@ -32,7 +30,7 @@ module.exports = (env) => {
         filename: 'index.html',
         inject: true,
       }),
-      new CleanWebpackPlugin(),
+      // new CleanWebpackPlugin(),
     ],
     // puts vendor modules into their own bundles; loads once unless new pkgs were installed
     optimization: {
@@ -48,7 +46,7 @@ module.exports = (env) => {
     },
   };
 
-  if (devEnv) {
+  if (development) {
     config = {
       ...commonConfig,
       mode: 'development',
@@ -74,7 +72,7 @@ module.exports = (env) => {
     };
   }
 
-  if (prodEnv) {
+  if (production) {
     config = {
       ...commonConfig,
       mode: 'production',
@@ -88,7 +86,7 @@ module.exports = (env) => {
     };
   }
 
-  if (apiEnv) {
+  if (api) {
     config = {
       ...commonConfig,
       target: 'node',
@@ -103,7 +101,7 @@ module.exports = (env) => {
         filename: '[name].[chunkhash].bundle.js',
         publicPath: '/',
       },
-      plugins: [new CleanWebpackPlugin()],
+      plugins: [],
       optimization: {},
     };
   }
