@@ -1,0 +1,24 @@
+{
+  "name": "movie-api",
+  "version": "1.0.0",
+  "description": "backend for movie-api project",
+  "main": "server.js",
+  "author": "Miguel Michel",
+  "license": "MIT",
+  "scripts": {
+    "start:api": "node src/server.js",
+    "dev:api": "nodemon src/server.js"
+  },
+  "dependencies": {
+    "apollo-datasource-mongodb": "^0.2.8",
+    "apollo-datasource-rest": "^0.9.5",
+    "apollo-server": "^2.19.0",
+    "axios": "^0.21.0",
+    "graphql": "^15.4.0",
+    "mongoose": "^5.10.16"
+  },
+  "devDependencies": {
+    "dotenv": "^8.2.0",
+    "nodemon": "^2.0.6"
+  }
+}
