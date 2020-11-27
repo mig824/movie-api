@@ -1,0 +1,14 @@
+{
+  "name": "movie-api-client",
+  "version": "1.0.0",
+  "description": "client side for movie-api",
+  "main": "main.js",
+  "author": "Miguel Michel",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.21.0",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-router-dom": "^5.2.0"
+  }
+}
