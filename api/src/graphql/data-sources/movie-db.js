@@ -5,6 +5,7 @@ class MovieDB extends MongoDataSource {
     try {
       const movie = await this.model.find({ imdb_id: imdbID });
       const { imdb_id, title, thumbs_down, thumbs_up } = movie[0];
+
       return {
         imdb_id,
         title,
@@ -13,6 +14,7 @@ class MovieDB extends MongoDataSource {
       };
     } catch (err) {
       console.log(err);
+
       throw new Error(err);
     }
   }
@@ -26,6 +28,7 @@ class MovieDB extends MongoDataSource {
           { new: true, upsert: true, useFindAndModify: false }
         );
         console.log(dbRes.thumbs_up, 'thumbs up!');
+
         return dbRes;
       } else {
         const dbRes = await this.model.findOneAndUpdate(
@@ -34,10 +37,12 @@ class MovieDB extends MongoDataSource {
           { new: true, upsert: true, useFindAndModify: false }
         );
         console.log(dbRes.thumbs_down, 'thumbs down!');
+
         return dbRes;
       }
     } catch (err) {
       console.log(err);
+
       throw new Error(err);
     }
   }
