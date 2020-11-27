@@ -3,14 +3,14 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const path = require('path');
 
 module.exports = (env) => {
-  const { development, production, api } = env;
+  const { development, production } = env;
 
-  console.log('\nWEBPACK ENV: ', { development, production, api }, '\n');
+  console.log('\nWEBPACK ENV: ', { development, production }, '\n');
 
   let config = {};
   const commonConfig = {
     entry: {
-      client: path.resolve(__dirname, 'src/client/main.jsx'),
+      client: path.resolve(__dirname, 'client/src/main.jsx'),
     },
     resolve: {
       extensions: ['.js', '.jsx'],
@@ -19,20 +19,30 @@ module.exports = (env) => {
       rules: [
         {
           test: /\.(js|jsx)$/,
-          loader: 'babel-loader',
           exclude: '/node_modules/',
+          use: {
+            loader: 'babel-loader',
+            options: {
+              presets: ['@babel/preset-env', '@babel/preset-react'],
+              plugins: ['syntax-dynamic-import'],
+              env: {
+                development: {
+                  compact: false,
+                },
+              },
+            },
+          },
         },
       ],
     },
     plugins: [
       new HtmlWebpackPlugin({
-        template: 'src/client/index.html',
+        template: 'client/src/index.html',
         filename: 'index.html',
         inject: true,
       }),
-      // new CleanWebpackPlugin(),
+      new CleanWebpackPlugin(),
     ],
-    // puts vendor modules into their own bundles; loads once unless new pkgs were installed
     optimization: {
       splitChunks: {
         cacheGroups: {
@@ -52,14 +62,14 @@ module.exports = (env) => {
       mode: 'development',
       devtool: 'inline-source-map',
       output: {
-        path: path.resolve(__dirname, 'dist/client'),
+        path: path.resolve(__dirname, 'client/dist'),
         chunkFilename: '[name].bundle.js',
         filename: '[name].bundle.js',
         publicPath: '/',
       },
       devServer: {
         publicPath: '/',
-        contentBase: 'dist',
+        contentBase: 'client/dist',
         open: true,
         hot: true,
         port: 8888,
@@ -78,31 +88,11 @@ module.exports = (env) => {
       mode: 'production',
       devtool: 'source-map',
       output: {
-        path: path.resolve(__dirname, 'dist/client'),
+        path: path.resolve(__dirname, 'client/dist'),
         chunkFilename: '[name].[chunkhash].bundle.js',
         filename: '[name].[chunkhash].bundle.js',
         publicPath: '/',
       },
-    };
-  }
-
-  if (api) {
-    config = {
-      ...commonConfig,
-      target: 'node',
-      mode: 'production',
-      devtool: 'source-map',
-      entry: {
-        api: path.resolve(__dirname, 'src/api/server.js'),
-      },
-      output: {
-        path: path.resolve(__dirname, 'dist/api'),
-        chunkFilename: '[name].[chunkhash].bundle.js',
-        filename: '[name].[chunkhash].bundle.js',
-        publicPath: '/',
-      },
-      plugins: [],
-      optimization: {},
     };
   }
 
