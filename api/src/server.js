@@ -1,11 +1,13 @@
-const { ApolloServer } = require('apollo-server');
+const { ApolloServer } = require('apollo-server-express');
+const express = require('express');
 const mongoose = require('mongoose');
 require('dotenv').config();
 
-const typeDefs = require('./gql/schema');
-const resolvers = require('./gql/resolvers');
-const MovieAPI = require('./gql/data-sources/movie-api');
-const MovieDB = require('./gql/data-sources/movie-db');
+const app = express();
+const typeDefs = require('./graphql/schema');
+const resolvers = require('./graphql/resolvers');
+const MovieAPI = require('./graphql/data-sources/movie-api');
+const MovieDB = require('./graphql/data-sources/movie-db');
 const MovieModel = require('./db/movie-model');
 const { API_KEY, MONGO_URI, PORT } = process.env;
 
@@ -35,7 +37,14 @@ const server = new ApolloServer({
   }),
 });
 
-(async () => {
-  const { url } = await server.listen({ port: PORT });
-  console.log(`\nGraphQL IDE --> ${url}\n`);
-})();
+server.applyMiddleware({
+  app,
+  cors: {
+    credentials: true,
+    origin: 'http://localhost:8888',
+  },
+});
+
+app.listen(PORT, () => {
+  console.log(`\nGraphQL IDE: http://localhost:${PORT}${server.graphqlPath}\n`);
+});
