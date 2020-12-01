@@ -1,17 +1,17 @@
 const { MongoDataSource } = require('apollo-datasource-mongodb');
 
 class MovieDB extends MongoDataSource {
-  async getThumbs(imdbID) {
+  async getStoredMovies() {
     try {
-      const movie = await this.model.find({ imdb_id: imdbID });
-      const { imdb_id, title, thumbs_down, thumbs_up } = movie[0];
+      const movies = await this.model.find({});
 
-      return {
+      return movies.map(({ imdb_id, title, thumbs_down, thumbs_up }) => ({
+        id: imdb_id,
         imdb_id,
         title,
-        thumbs_up,
         thumbs_down,
-      };
+        thumbs_up,
+      }));
     } catch (err) {
       console.log(err);
 

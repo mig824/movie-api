@@ -1,4 +1,5 @@
 const { RESTDataSource } = require('apollo-datasource-rest');
+const { UserInputError } = require('apollo-server-express');
 
 class MovieAPI extends RESTDataSource {
   constructor() {
@@ -21,15 +22,20 @@ class MovieAPI extends RESTDataSource {
   async getMovie(title) {
     try {
       const response = await this.get(`?t=${title}`);
+      if (response?.Error?.includes('not found')) {
+        throw new UserInputError('MOVIE NOT FOUND');
+      }
+
       return this.movieReducer(response);
     } catch (err) {
-      throw new Error(err);
+      throw err;
     }
   }
 
   movieReducer({ Title, Director, Actors, Released, Plot, imdbID, Runtime }) {
     return {
       id: imdbID,
+      imdb_id: imdbID,
       title: Title,
       director: Director,
       actors: Actors === 'N/A' || undefined ? [] : Actors.split(', '),

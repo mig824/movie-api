@@ -3,8 +3,8 @@ module.exports = {
     movie: (_, { title }, { dataSources }) => {
       return dataSources.movieAPI.getMovie(title);
     },
-    thumbs: (_, { imdb_id }, { dataSources }) => {
-      return dataSources.movieDB.getThumbs(imdb_id);
+    stored_movies: (_, __, { dataSources }) => {
+      return dataSources.movieDB.getStoredMovies();
     },
   },
   Mutation: {
@@ -16,11 +16,16 @@ module.exports = {
       );
 
       if (dbRes) {
-        const { imdb_id, title, thumbs_up, thumbs_down } = dbRes;
         return {
           status: 'OK',
           message: 'Thumbs updated successfully',
-          updated_doc: { imdb_id, title, thumbs_up, thumbs_down },
+          modified_doc: {
+            id: dbRes.imdb_id,
+            imdb_id: dbRes.imdb_id,
+            title: dbRes.title,
+            thumbs_up: dbRes.thumbs_up,
+            thumbs_down: dbRes.thumbs_down,
+          },
         };
       } else {
         return {

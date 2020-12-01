@@ -2,7 +2,8 @@ const { gql } = require('apollo-server-express');
 
 const typeDefs = gql`
   type Movie {
-    id: String
+    id: ID!
+    imdb_id: String
     title: String
     director: String
     actors: [String]
@@ -11,7 +12,8 @@ const typeDefs = gql`
     runtime: String
   }
 
-  type MovieThumbs {
+  type StoredMovie {
+    id: ID!
     imdb_id: String
     title: String
     thumbs_up: Int
@@ -21,18 +23,18 @@ const typeDefs = gql`
   type UpdateThumbsResponse {
     status: String!
     message: String
-    updated_doc: MovieThumbs
+    modified_doc: StoredMovie
   }
 
   type Query {
     movie(title: String!): Movie
-    thumbs(imdb_id: ID!): MovieThumbs
+    stored_movies: [StoredMovie]
   }
 
   type Mutation {
     update_thumbs(
       is_liked: Boolean!
-      imdb_id: ID!
+      imdb_id: String!
       title: String!
     ): UpdateThumbsResponse
   }
