@@ -1,10 +1,11 @@
 {
-  "name": "movie-api-client",
+  "name": "movie-api-ui",
   "version": "1.0.0",
-  "description": "client side for movie-api",
+  "description": "UI for movie-api",
   "main": "main.js",
   "author": "Miguel Michel",
   "license": "MIT",
+  "private": true,
   "scripts": {
     "install:yarn": "yarn",
     "install:npm": "npm install",
@@ -13,7 +14,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.2.9",
-    "axios": "^0.21.0",
+    "@emotion/react": "^11.1.1",
     "graphql": "^15.4.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
@@ -25,7 +26,6 @@
     "@babel/preset-react": "^7.12.7",
     "babel-loader": "^8.2.2",
     "clean-webpack-plugin": "^3.0.0",
-    "concurrently": "^5.3.0",
     "html-webpack-plugin": "5.0.0-alpha.3",
     "webpack": "^5.8.0",
     "webpack-cli": "^4.2.0",

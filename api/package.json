@@ -1,10 +1,11 @@
 {
   "name": "movie-api",
   "version": "1.0.0",
-  "description": "backend for movie-api project",
+  "description": "api for app",
   "main": "server.js",
   "author": "Miguel Michel",
   "license": "MIT",
+  "private": true,
   "scripts": {
     "install:yarn": "yarn",
     "install:npm": "npm install",
@@ -14,7 +15,6 @@
   "dependencies": {
     "apollo-datasource-mongodb": "^0.2.8",
     "apollo-datasource-rest": "^0.9.5",
-    "apollo-server": "^2.19.0",
     "apollo-server-express": "^2.19.0",
     "axios": "^0.21.0",
     "express": "^4.17.1",

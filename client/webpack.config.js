@@ -3,7 +3,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const path = require('path');
 
 module.exports = ({ development, production }) => {
-  console.log('\nWEBPACK ENV: ', { development, production }, '\n');
+  console.log(`\nWEBPACK ENV: ${{ development, production }}\n`);
 
   let config = {};
   const commonConfig = {
