@@ -3,7 +3,6 @@ const { gql } = require('apollo-server-express');
 const typeDefs = gql`
   type Movie {
     id: ID!
-    imdb_id: String
     title: String
     director: String
     actors: [String]
@@ -14,7 +13,6 @@ const typeDefs = gql`
 
   type StoredMovie {
     id: ID!
-    imdb_id: String
     title: String
     thumbs_up: Int
     thumbs_down: Int
@@ -34,7 +32,7 @@ const typeDefs = gql`
   type Mutation {
     update_thumbs(
       is_liked: Boolean!
-      imdb_id: String!
+      id: ID!
       title: String!
     ): UpdateThumbsResponse
   }

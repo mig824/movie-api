@@ -1,5 +1,5 @@
 {
-  "name": "movie-api-year-one",
+  "name": "movie-api",
   "version": "1.0.0",
   "description": "Movie API",
   "author": "Miguel Michel",
@@ -9,8 +9,8 @@
     "concurrently": "^5.3.0"
   },
   "scripts": {
-    "install:yarn": "npm run install:yarn --prefix client & npm run install:yarn --prefix api",
-    "install:npm": "npm run install:npm --prefix client & npm run install:npm --prefix api",
+    "install:yarn": "yarn & npm run install:yarn --prefix client & npm run install:yarn --prefix api",
+    "install:npm": "npm install & npm run install:npm --prefix client & npm run install:npm --prefix api",
     "dev": "concurrently \"npm run dev:client --prefix client\" \"npm run dev:api --prefix api\"",
     "build": "npm run build:client --prefix client",
     "clean": "rm -rf client/dist/"

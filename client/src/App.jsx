@@ -7,19 +7,17 @@ import client from './graphql/client-config';
 import HomePage from './pages/Home';
 import SavedMoviesPage from './pages/SavedMovies';
 
-const App = () => {
-  return (
-    <ApolloProvider client={client}>
-      <GlobalCSS styles={globalCSS} />
-      <BrowserRouter>
-        <Switch>
-          <Route path='/' component={HomePage} exact />
-          <Route path='/saved-movies' component={SavedMoviesPage} />
-        </Switch>
-      </BrowserRouter>
-    </ApolloProvider>
-  );
-};
+const App = () => (
+  <ApolloProvider client={client}>
+    <GlobalCSS styles={globalCSS} />
+    <BrowserRouter>
+      <Switch>
+        <Route path='/' component={HomePage} exact />
+        <Route path='/saved-movies' component={SavedMoviesPage} />
+      </Switch>
+    </BrowserRouter>
+  </ApolloProvider>
+);
 
 const globalCSS = css`
   html,

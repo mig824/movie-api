@@ -9,7 +9,11 @@ const resolvers = require('./graphql/resolvers');
 const MovieAPI = require('./graphql/data-sources/movie-api');
 const MovieDB = require('./graphql/data-sources/movie-db');
 const MovieModel = require('./db/movie-model');
-const { API_KEY, MONGO_URI, PORT } = process.env;
+
+const PORT = process.env.PORT || 3333;
+const API_KEY = process.env.API_KEY;
+const MONGO_URI =
+  process.env.MONGO_URI || 'mongodb://localhost:27017/Liked_Movies';
 
 (async () => {
   try {
@@ -41,7 +45,7 @@ server.applyMiddleware({
   app,
   cors: {
     credentials: true,
-    origin: 'http://localhost:8888',
+    origin: 'http://localhost:8000', // dev server port
   },
 });
 

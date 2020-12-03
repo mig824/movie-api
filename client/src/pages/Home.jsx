@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import React from 'react';
+import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useLazyQuery, useMutation, gql } from '@apollo/client';
 import { css, jsx } from '@emotion/react';
@@ -7,18 +7,18 @@ import { css, jsx } from '@emotion/react';
 import Movie from '../components/Movie';
 
 const HomePage = () => {
+  const titleInputRef = useRef();
   const [getMovie, { loading, error, data }] = useLazyQuery(GET_MOVIE);
   const [updateThumbs] = useMutation(UPDATE_THUMBS, {
     update(cache, { data: { update_thumbs: update_thumbs } }) {
       cache.modify({
         fields: {
           stored_movies(existingMovies = []) {
-            const newMovieRef = cache.writeFragment({
+            cache.writeFragment({
               data: update_thumbs.modified_doc,
               fragment: gql`
                 fragment UpdateMovie on StoredMovies {
                   id
-                  imdb_id
                   title
                   thumbs_up
                   thumbs_down
@@ -26,20 +26,17 @@ const HomePage = () => {
               `,
             });
 
-            console.log({ newMovieRef });
-
-            return [...existingMovies, newMovieRef];
+            return existingMovies;
           },
         },
       });
     },
   });
 
-  const likeMovie = (is_liked, imdb_id, title) => {
-    updateThumbs({ variables: { is_liked, imdb_id, title } });
+  const likeMovie = (is_liked, id, title) => {
+    updateThumbs({ variables: { is_liked, id, title } });
   };
 
-  let userInput;
   return (
     <div css={homePageCSS}>
       <h2>Search Movie API</h2>
@@ -50,22 +47,20 @@ const HomePage = () => {
         This query takes in a movie title and only fetches one match. A movie is
         saved when you say if you like it or not
       </p>
-      <input
-        type='text'
-        placeholder='Enter Movie Title'
-        ref={(node) => (userInput = node)}
-      />
+      <input type='text' placeholder='Enter Movie Title' ref={titleInputRef} />
       <button
         onClick={() => {
-          getMovie({ variables: { title: userInput.value } });
-          userInput.value = '';
+          if (titleInputRef.current.value !== '') {
+            getMovie({ variables: { title: titleInputRef.current.value } });
+          }
+          titleInputRef.current.value = '';
         }}
       >
         Search
       </button>
       <br />
-      {loading ? <p>Fetching movie...</p> : null}
-      {error ? <p>Error: {error}</p> : null}
+      {loading && <p>Fetching movie...</p>}
+      {error && <p>Error: {error}</p>}
       {data?.movie && <Movie movie={data.movie} likeMovie={likeMovie} />}
     </div>
   );
@@ -74,7 +69,7 @@ const HomePage = () => {
 const GET_MOVIE = gql`
   query GetMovie($title: String!) {
     movie(title: $title) {
-      imdb_id
+      id
       title
       director
       actors
@@ -86,12 +81,8 @@ const GET_MOVIE = gql`
 `;
 
 const UPDATE_THUMBS = gql`
-  mutation UpdateThumbs(
-    $is_liked: Boolean!
-    $imdb_id: String!
-    $title: String!
-  ) {
-    update_thumbs(is_liked: $is_liked, imdb_id: $imdb_id, title: $title) {
+  mutation UpdateThumbs($is_liked: Boolean!, $id: ID!, $title: String!) {
+    update_thumbs(is_liked: $is_liked, id: $id, title: $title) {
       status
       message
       modified_doc {
@@ -128,6 +119,14 @@ const homePageCSS = css`
   .btn-div {
     display: flex;
     justify-content: space-around;
+  }
+
+  ul {
+    list-style: none;
+
+    li {
+      padding: 0.2rem 0;
+    }
   }
 `;
 

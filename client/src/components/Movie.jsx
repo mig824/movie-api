@@ -1,36 +1,30 @@
 import React from 'react';
 
 const Movie = ({
-  movie: {
-    title,
-    director,
-    actors,
-    release_year,
-    description,
-    runtime,
-    imdb_id,
-  },
+  movie: { id, title, director, actors, release_year, description, runtime },
   likeMovie,
-}) => {
-  console.log('Render: Movie');
-  return (
-    <div>
-      <h3>{title}</h3>
-      <p>{director}</p>
-      <p>{actors}</p>
-      <p>{release_year}</p>
-      <p>{runtime}</p>
-      <p>{description}</p>
-      <div className='btn-div'>
-        <button onClick={() => likeMovie(true, imdb_id, title)}>
-          I like this movie!
-        </button>
-        <button onClick={() => likeMovie(false, imdb_id, title)}>
-          This movie is wack!
-        </button>
-      </div>
+}) => (
+  <div>
+    <h3>{title}</h3>
+    <small>
+      Released: {release_year} -- {runtime}
+    </small>
+    <p>Directed by: {director}</p>
+    <ul>
+      {actors.map((actor) => (
+        <li key={Math.random() * 55 + actor.charCodeAt(1)}>{actor}</li>
+      ))}
+    </ul>
+    <p>{description}</p>
+    <div className='btn-div'>
+      <button onClick={() => likeMovie(true, id, title)}>
+        I like this movie!
+      </button>
+      <button onClick={() => likeMovie(false, id, title)}>
+        This movie is wack!
+      </button>
     </div>
-  );
-};
+  </div>
+);
 
 export default Movie;

@@ -3,8 +3,6 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const path = require('path');
 
 module.exports = ({ development, production }) => {
-  console.log(`\nWEBPACK ENV: ${{ development, production }}\n`);
-
   let config = {};
   const commonConfig = {
     entry: {
@@ -69,10 +67,10 @@ module.exports = ({ development, production }) => {
         contentBase: 'dist',
         open: true,
         hot: true,
-        port: 8888,
+        port: 8000,
         proxy: {
           '/graphql': {
-            target: 'http://localhost:4000/',
+            target: 'http://localhost:3333/',
           },
         },
       },

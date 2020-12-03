@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useLazyQuery, gql } from '@apollo/client';
 import { jsx, css } from '@emotion/react';
@@ -7,14 +7,18 @@ import { jsx, css } from '@emotion/react';
 import MovieCard from '../components/MovieCard';
 
 const SavedMoviesPage = () => {
-  const [getStoredMovies, { data }] = useLazyQuery(GET_MOVIES);
+  const [getStoredMovies, { data, loading, error }] = useLazyQuery(GET_MOVIES);
+
+  useEffect(() => getStoredMovies(), []);
 
   return (
     <div css={savedMoviesPageCSS}>
-      <h1>Saved Movies</h1>
+      <h2>Saved Movies</h2>
       <Link to='/'>Go back</Link>
-      <button onClick={() => getStoredMovies()}>Fetch</button>
+      <br />
       <div className='saved-movies-container'>
+        {loading && <p>Fetching movies...</p>}
+        {error && <p>Error: {error}</p>}
         {data?.stored_movies.map((movie) => (
           <MovieCard movie={movie} key={`stored-movie-${movie.id}`} />
         ))}

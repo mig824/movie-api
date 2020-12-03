@@ -8,7 +8,8 @@ class MovieAPI extends RESTDataSource {
      * an API key is required to make these requests
      *
      * if you want, go to the baseURL and submit your email
-     * then enter it in a .env file (refer to .env.example)
+     * then enter the key in a .env file (refer to .env.example)
+     * or hard code it
      *
      * (its free)
      */
@@ -26,23 +27,10 @@ class MovieAPI extends RESTDataSource {
         throw new UserInputError('MOVIE NOT FOUND');
       }
 
-      return this.movieReducer(response);
+      return response;
     } catch (err) {
       throw err;
     }
-  }
-
-  movieReducer({ Title, Director, Actors, Released, Plot, imdbID, Runtime }) {
-    return {
-      id: imdbID,
-      imdb_id: imdbID,
-      title: Title,
-      director: Director,
-      actors: Actors === 'N/A' || undefined ? [] : Actors.split(', '),
-      release_year: Released,
-      description: Plot,
-      runtime: Runtime,
-    };
   }
 }
 
